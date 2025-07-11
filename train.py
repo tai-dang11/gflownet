@@ -228,7 +228,6 @@ def train():
             else:
                 final_smiles = [Chem.MolToSmiles(res[1][-1]) if res and res[1] else "" for res in completed]
                 rewards = reward_function(final_smiles)
-                # log_rewards = torch.log(rewards)
 
                 for i, res in enumerate(completed):
                     if not res or not res[0] or res[0][-1] != "<TERMINATE>":
@@ -272,35 +271,6 @@ def train():
             loss_for_accumulation.backward()
             accumulated_loss += loss_for_accumulation.item()
 
-        
-        # max_len = max(len(p) for p in log_p_forwards if p)
-        # if max_len == 0: continue
-        # padded_log_pf = torch.zeros(config.BATCH_SIZE, max_len, device=config.DEVICE)
-        # for i in range(config.BATCH_SIZE):
-        #     if log_p_forwards[i]:
-        #         padded_log_pf[i, :len(log_p_forwards[i])] = torch.stack(log_p_forwards[i])
-
-        # delta = (logZ + padded_log_pf) - log_rewards.unsqueeze(1)
-        # delta_cumsum = torch.cumsum(delta, dim=1)
-
-        # batch_loss = 0.
-        # total_lambda = 0.
-        # for subtraj_len in range(1, max_len + 1):
-        #     subtb_lambda = config.subtb_lambda
-        #     subtb_term = (delta_cumsum[:, subtraj_len:] - delta_cumsum[:, :-subtraj_len])**2
-        #     mask = torch.ones_like(subtb_term, dtype=torch.bool)
-        #     for i in range(config.BATCH_SIZE):
-        #         if len(log_p_forwards[i]) < subtraj_len:
-        #             mask[i, :] = False
-        #     valid_terms = subtb_term[mask]
-        #     batch_loss += (subtb_lambda ** (subtraj_len - 1)) * valid_terms.sum()
-        #     total_lambda += (subtb_lambda ** (subtraj_len - 1)) * mask.sum()
-
-        # if total_lambda > 0:
-        #     print(f"Step {step}: Batch Loss = {batch_loss.item()}, Total Lambda = {total_lambda.item()}")
-        #     final_loss = batch_loss / total_lambda
-        #     accumulated_loss += final_loss.item()
-        #     (final_loss / config.grad_acc).backward()
         
         optimizer.step()
 

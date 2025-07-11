@@ -15,7 +15,7 @@ RDLogger.DisableLog('rdApp.*')
 # PART 1: CONFIGURATION
 # =================================================================================================
 class Config:
-    MODEL_NAME = "/lfs/skampere1/0/sttruong/finetune_pvs_llm/merged_model/merged_sft_chemical_txgemma9b_epoch_20"
+    MODEL_NAME = "merged_model/merged_sft_chemical_txgemma9b_epoch_20"
     BUILDING_BLOCKS_PATH = "data/short_building_blocks_subsampled_10000.txt"
     REACTIONS_PATH = "data/hb.txt"
     NUM_TRAINING_STEPS = 2000
@@ -32,7 +32,6 @@ class Config:
     grad_acc = 1
     pf_temp_high = 2.0
     pf_temp_low = 0.5
-    subtb_lambda = 1.0
 
     use_lora = True
     class LoraConfig:
@@ -133,7 +132,7 @@ class Reaction:
         return result
 
 class ChemistryEngine:
-    """Handles building‐block addition, reaction execution, and template‐based applicability with caching."""
+    """Handles building-block addition, reaction execution, and template-based applicability with caching."""
     def __init__(self, building_block_path: str, reaction_path: str, precompute_bb_masks_path: str):
         print("Initializing Chemistry Engine...")
         # Load building blocks
